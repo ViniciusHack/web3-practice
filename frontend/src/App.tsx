@@ -225,7 +225,9 @@ export const GuessingGame = () => {
       
       const tx = await contract.methods.makeGuess(Number(guess)).send({
         from: account,
-        value: web3.utils.toWei(betAmount, 'ether')
+        value: web3.utils.toWei(betAmount, 'ether'),
+        gas: "150000",
+        gasPrice: web3.utils.toWei("5", "gwei")
       });
       
       console.log('Transaction result:', tx);
