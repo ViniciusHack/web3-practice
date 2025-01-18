@@ -369,7 +369,7 @@ export const GuessingGame = () => {
                      status.includes('🎉') ? 'Success' : 
                      'Processing'}
                   </AlertTitle>
-                  <AlertDescription>
+                  <AlertDescription className="break-words">
                     {status}
                   </AlertDescription>
                 </Alert>
