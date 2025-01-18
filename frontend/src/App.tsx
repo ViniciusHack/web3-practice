@@ -113,14 +113,6 @@ export const GuessingGame = () => {
     if (window.ethereum) {
       const web3Instance = new Web3(window.ethereum);
       setWeb3(web3Instance);
-      
-      // Check if we're on the right network
-      web3Instance.eth.getChainId().then((chainId) => {
-        console.log('Current chain ID:', chainId);
-        if (Number(chainId) !== 31337) { // Hardhat's chain ID
-          setStatus('❌ Please connect to Hardhat Network (Chain ID: 31337)');
-        }
-      });
     }
   }, []);
 
@@ -128,37 +120,6 @@ export const GuessingGame = () => {
     if (!web3) return;
     
     try {
-      // First check/switch to the correct network
-      try {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x7A69' }], // 31337 in hex
-        });
-      } catch (switchError) {
-        // If the network doesn't exist, add it
-        if (switchError && typeof switchError === 'object' && 'code' in switchError && switchError.code === 4902) {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: '0x7A69', // 31337 in hex
-                chainName: 'Hardhat Network',
-                nativeCurrency: {
-                  name: 'Hardhat Ether',
-                  symbol: 'hETH',
-                  decimals: 18
-                },
-                rpcUrls: ['http://127.0.0.1:8545/'],
-                blockExplorerUrls: [],
-                iconUrls: []
-              },
-            ],
-          });
-        } else {
-          throw switchError;
-        }
-      }
-      
       await window.ethereum.request({
         method: 'wallet_requestPermissions',
         params: [{ eth_accounts: {} }],
