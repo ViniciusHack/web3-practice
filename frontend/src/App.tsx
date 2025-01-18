@@ -225,9 +225,7 @@ export const GuessingGame = () => {
       
       const tx = await contract.methods.makeGuess(Number(guess)).send({
         from: account,
-        value: web3.utils.toWei(betAmount, 'ether'),
-        gas: "150000",
-        gasPrice: web3.utils.toWei("5", "gwei")
+        value: web3.utils.toWei(betAmount, 'ether')
       });
       
       console.log('Transaction result:', tx);
@@ -245,7 +243,9 @@ export const GuessingGame = () => {
       } else if (errorMessage.includes("Minimum bet not met")) {
         setStatus('❌ Minimum bet is 0.01 ETH!');
       } else {
-        setStatus(`❌ Error submitting guess: ${errorMessage}`);
+        // if error message too long, truncate it
+        const truncatedMessage = errorMessage.length > 100 ? errorMessage.slice(0, 100) + '...' : errorMessage;
+        setStatus(`❌ Error submitting guess: ${truncatedMessage}`);
       }
     }
   };
